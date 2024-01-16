@@ -1,11 +1,10 @@
-import { describe, expect, isFirstRun, it } from 'vitest'
+import { describe, expect, it } from 'vitest'
 import { Clients } from '../entities/clients'
 import { InMemoryClientsRepository } from '../repositories/in-memory/in-memory-clients-repository'
 import { idUnique as id } from '../utils/generateUniqueId'
 import { CreateClient } from './create-client'
 
 describe('Create client', () => {
-  isFirstRun()
   it('should be able to create a new client', () => {
     const clientRepository = new InMemoryClientsRepository()
     const createClient = new CreateClient(clientRepository)
@@ -38,6 +37,26 @@ describe('Create client', () => {
         id: '123',
         name: 'John Doe',
         email: 'johndoe@gmail.com',
+        phone: 11922223333,
+        password: 'johndoe123',
+      }),
+    ).rejects.toBeInstanceOf(Error)
+
+    expect(
+      createClient.execute({
+        id,
+        name: 'John Doe',
+        email: 'johndoe@gmail.com',
+        phone: 11922223333,
+        password: 'johndoe',
+      }),
+    ).rejects.toBeInstanceOf(Error)
+
+    expect(
+      createClient.execute({
+        id,
+        name: 'John Doe',
+        email: 'johndoegmail.com',
         phone: 11922223333,
         password: 'johndoe123',
       }),
