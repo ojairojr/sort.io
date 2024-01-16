@@ -1,4 +1,5 @@
 import { Clients } from '../entities/clients'
+import { ClientsRepository } from '../repositories/clients-repository'
 
 interface CreateClientRequest {
   id: string
@@ -11,6 +12,8 @@ interface CreateClientRequest {
 type CreateClientResponse = Clients
 
 export class CreateClient {
+  constructor(private clientsRepository: ClientsRepository) {}
+
   async execute({
     id,
     name,
@@ -18,7 +21,15 @@ export class CreateClient {
     phone,
     password,
   }: CreateClientRequest): Promise<CreateClientResponse> {
+    const userExists = await this.clientsRepository.findClientId(id)
+
+    if (userExists) {
+      throw new Error('User already exists')
+    }
+
     const client = new Clients({ id, name, email, phone, password })
+
+    await this.clientsRepository.create(client)
 
     return client
   }
