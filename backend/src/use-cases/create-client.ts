@@ -1,3 +1,4 @@
+import { hash } from 'bcrypt'
 import { z } from 'zod'
 import { Clients } from '../entities/clients'
 import { ClientsRepository } from '../repositories/clients-repository'
@@ -42,7 +43,9 @@ export class CreateClient {
       throw new Error('Dados inválidos, tente novamente.')
     }
 
-    const client = new Clients({ id, name, email, phone, password })
+    const passHashed = await hash(password, 10)
+
+    const client = new Clients({ id, name, email, phone, password: passHashed })
 
     await this.clientsRepository.create(client)
 
