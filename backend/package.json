@@ -23,6 +23,8 @@
     "zod": "^3.22.4"
   },
   "dependencies": {
+    "@types/bcrypt": "^5.0.2",
+    "bcrypt": "^5.1.1",
     "fastify": "^4.25.2"
   }
 }
