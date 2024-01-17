@@ -26,7 +26,7 @@ export class InMemoryClientsRepository implements ClientsRepository {
   }
 
   async loginClient(email: string, pass: string): Promise<Clients> {
-    const client = this.items.find((clients) => clients.email === email)
+    const client = await this.findClientEmail(email)
     if (!client) {
       throw new Error('User does not exists')
     }
